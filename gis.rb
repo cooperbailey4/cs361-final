@@ -6,12 +6,11 @@ class Track
     segments.each do |coordinates|
       segment_objects.append(TrackSegment.new(coordinates))
     end
-    # set segments to segment_objects
     @segments = segment_objects
   end
 
 =begin
-get_track_json() creates the json string for the track
+get_json() creates the json string for the track class
 =end
 
   def get_json()
@@ -27,7 +26,6 @@ get_track_json() creates the json string for the track
     json_string += '"geometry": {'
     json_string += '"type": "MultiLineString",'
     json_string +='"coordinates": ['
-    # Loop through all the segment objects
     @segments.each_with_index do |coordinates, index|
 
       if index > 0
@@ -35,13 +33,10 @@ get_track_json() creates the json string for the track
       end
 
       json_string += '['
-      # Loop through all the coordinates in the segment
+
       track_segment_string = ''
-
       coordinates.coordinates.each do |coordinate|
-
         track_segment_string = get_coordinate_json(track_segment_string, coordinate)
-
       end
 
       json_string+=track_segment_string
@@ -55,6 +50,7 @@ get_track_json() creates the json string for the track
 
 =begin
 get_coordinate_json(...) creates the json string for the coordinates to be sent to the track
+Adds the coordinate parts (longitude, latitude, and elevation) to the json string
 =end
 
   def get_coordinate_json(track_segment_string, coordinate)
@@ -62,7 +58,6 @@ get_coordinate_json(...) creates the json string for the coordinates to be sent 
     if track_segment_string != ''
       track_segment_string += ','
     end
-    # Add the coordinates to the string
     track_segment_string += '['
     track_segment_string += "#{coordinate.lon},#{coordinate.lat}"
     if coordinate.ele != nil
@@ -103,9 +98,10 @@ class Waypoint
     @type = type
   end
 
+  #get_json() creats the json string for the waypoint class
+
   def get_json(indent=0)
     json_string = '{"type": "Feature",'
-    # if name is not nil or type is not nil
     json_string += '"geometry": {"type": "Point","coordinates": '
     json_string += "[#{@lon},#{@lat}"
 
@@ -120,11 +116,11 @@ class Waypoint
       if name != nil
         json_string += '"title": "' + @name + '"'
       end
-      if type != nil  # if type is not nil (not helpful comment)
+      if type != nil
         if name != nil
           json_string += ','
         end
-        json_string += '"icon": "' + @type + '"'  # type is the icon (dont think this is helpful)
+        json_string += '"icon": "' + @type + '"'
       end
       json_string += '}'
     end
@@ -141,24 +137,16 @@ class World
     @features = waypoints_and_tracks
   end
 
-  #is this necessary?
-  # def add_feature(f)
-  #   @features.append(t)
-  # end
-
+=begin
+  writes the json string for all waypoints and tracks
+=end
   def to_geojson(indent=0)
-    # Write stuff
     geo_json_string = '{"type": "FeatureCollection","features": ['
     @features.each_with_index do |waypoint_or_track, index|
       if index != 0
         geo_json_string +=","
       end
 
-      # if waypoint_or_track.class == Track
-      #     geo_json_string += waypoint_or_track.get_track_json
-      # elsif waypoint_or_track.class == Waypoint
-      #     geo_json_string += waypoint_or_track.get_waypoint_json
-      # end
       geo_json_string += waypoint_or_track.get_json
 
     end
