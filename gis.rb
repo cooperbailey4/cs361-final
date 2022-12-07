@@ -128,9 +128,10 @@ class World
     @features = things
   end
 
-  def add_feature(f)
-    @features.append(t)
-  end
+  #is this necessary?
+  # def add_feature(f)
+  #   @features.append(t)
+  # end
 
   def to_geojson(indent=0)
     # Write stuff
