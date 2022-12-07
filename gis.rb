@@ -136,15 +136,15 @@ class World
   def to_geojson(indent=0)
     # Write stuff
     s = '{"type": "FeatureCollection","features": ['
-    @features.each_with_index do |f,i|
-      if i != 0
+    @features.each_with_index do |waypoint_or_track, index|
+      if index != 0
         s +=","
       end
 
-      if f.class == Track
-          s += f.get_track_json
-      elsif f.class == Waypoint
-          s += f.get_waypoint_json
+      if waypoint_or_track.class == Track
+          s += waypoint_or_track.get_track_json
+      elsif waypoint_or_track.class == Waypoint
+          s += waypoint_or_track.get_waypoint_json
       end
 
     end
