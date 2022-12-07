@@ -33,24 +33,24 @@ class Track
 
       json_string += '['
       # Loop through all the coordinates in the segment
-      tsj = ''
+      track_segment_string = ''
 
       coordinates.coordinates.each do |coordinate|
 
-        if tsj != ''
-          tsj += ','
+        if track_segment_string != ''
+          track_segment_string += ','
         end
         # Add the coordinate
-        tsj += '['
-        tsj += "#{coordinate.lon},#{coordinate.lat}"
+        track_segment_string += '['
+        track_segment_string += "#{coordinate.lon},#{coordinate.lat}"
         if coordinate.ele != nil
-          tsj += ",#{coordinate.ele}"
+          track_segment_string += ",#{coordinate.ele}"
         end
-        tsj += ']'
+        track_segment_string += ']'
 
       end
 
-      json_string+=tsj
+      json_string+=track_segment_string
       json_string+=']'
 
     end
@@ -174,6 +174,7 @@ def main()
   t = Track.new([ts1, ts2], "track 1")
   t2 = Track.new([ts3], "track 2")
 
+  #world takes a name and list of waypoints, or track or waypoints and track
   world = World.new("My Data", [w, w2, t, t2])
 
   puts world.to_geojson()
