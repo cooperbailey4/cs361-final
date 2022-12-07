@@ -48,6 +48,7 @@ class Track
     j + ']}}'
   end
 end
+
 class TrackSegment
   attr_reader :coordinates
   def initialize(coordinates)
@@ -68,9 +69,7 @@ end
 
 class Waypoint
 
-
-
-attr_reader :lat, :lon, :ele, :name, :type
+  attr_reader :lat, :lon, :ele, :name, :type
 
   def initialize(lon, lat, ele=nil, name=nil, type=nil)
     @lat = lat
@@ -85,10 +84,13 @@ attr_reader :lat, :lon, :ele, :name, :type
     # if name is not nil or type is not nil
     j += '"geometry": {"type": "Point","coordinates": '
     j += "[#{@lon},#{@lat}"
+
     if ele != nil
       j += ",#{@ele}"
     end
+
     j += ']},'
+
     if name != nil or type != nil
       j += '"properties": {'
       if name != nil
@@ -102,9 +104,11 @@ attr_reader :lat, :lon, :ele, :name, :type
       end
       j += '}'
     end
+
     j += "}"
     return j
   end
+
 end
 
 class World
