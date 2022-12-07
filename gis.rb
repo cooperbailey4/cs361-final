@@ -59,10 +59,13 @@ Adds the coordinate parts (longitude, latitude, and elevation) to the json strin
       track_segment_string += ','
     end
     track_segment_string += '['
+
+    # this could probably be turned into a function within the point class
     track_segment_string += "#{coordinate.lon},#{coordinate.lat}"
     if coordinate.ele != nil
       track_segment_string += ",#{coordinate.ele}"
     end
+
     track_segment_string += ']'
   end
 
@@ -86,25 +89,25 @@ class Point
   end
 end
 
-class Waypoint
+#this could probably be subclass of point
+class Waypoint < Point
 
   attr_reader :lat, :lon, :ele, :name, :type
 
   def initialize(lon, lat, ele=nil, name=nil, type=nil)
-    @lat = lat
-    @lon = lon
-    @ele = ele
+    super(lon, lat, ele)
     @name = name
     @type = type
   end
 
-  #get_json() creats the json string for the waypoint class
+  #get_json() creates the json string for the waypoint class
 
   def get_json(indent=0)
     json_string = '{"type": "Feature",'
     json_string += '"geometry": {"type": "Point","coordinates": '
-    json_string += "[#{@lon},#{@lat}"
 
+    # this could probably be turned into a function within the point class
+    json_string += "[#{@lon},#{@lat}"
     if ele != nil
       json_string += ",#{@ele}"
     end
@@ -143,6 +146,7 @@ class World
   def to_geojson(indent=0)
     geo_json_string = '{"type": "FeatureCollection","features": ['
     @features.each_with_index do |waypoint_or_track, index|
+
       if index != 0
         geo_json_string +=","
       end
