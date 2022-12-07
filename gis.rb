@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-
+#j = json_string
 class Track
   def initialize(segments, name=nil)
     @name = name
@@ -107,11 +107,11 @@ class Waypoint
       if name != nil
         json_string += '"title": "' + @name + '"'
       end
-      if type != nil  # if type is not nil
+      if type != nil  # if type is not nil (not helpful comment)
         if name != nil
           json_string += ','
         end
-        json_string += '"icon": "' + @type + '"'  # type is the icon
+        json_string += '"icon": "' + @type + '"'  # type is the icon (dont think this is helpful)
       end
       json_string += '}'
     end
