@@ -35,16 +35,16 @@ class Track
       # Loop through all the coordinates in the segment
       tsj = ''
 
-      coordinates.coordinates.each do |c|
+      coordinates.coordinates.each do |coordinate|
 
         if tsj != ''
           tsj += ','
         end
         # Add the coordinate
         tsj += '['
-        tsj += "#{c.lon},#{c.lat}"
-        if c.ele != nil
-          tsj += ",#{c.ele}"
+        tsj += "#{coordinate.lon},#{coordinate.lat}"
+        if coordinate.ele != nil
+          tsj += ",#{coordinate.ele}"
         end
         tsj += ']'
 
