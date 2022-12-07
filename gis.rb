@@ -12,25 +12,31 @@ class Track
   end
 
   def get_track_json()
-    j = '{'
-    j += '"type": "Feature", '
+    json_string = '{'
+    json_string += '"type": "Feature", '
+
     if @name != nil
-      j+= '"properties": {'
-      j += '"title": "' + @name + '"'
-      j += '},'
+      json_string += '"properties": {'
+      json_string += '"title": "' + @name + '"'
+      json_string += '},'
     end
-    j += '"geometry": {'
-    j += '"type": "MultiLineString",'
-    j +='"coordinates": ['
+
+    json_string += '"geometry": {'
+    json_string += '"type": "MultiLineString",'
+    json_string +='"coordinates": ['
     # Loop through all the segment objects
     @segments.each_with_index do |s, index|
+
       if index > 0
-        j += ","
+        json_string += ","
       end
-      j += '['
+
+      json_string += '['
       # Loop through all the coordinates in the segment
       tsj = ''
+
       s.coordinates.each do |c|
+
         if tsj != ''
           tsj += ','
         end
@@ -41,11 +47,16 @@ class Track
           tsj += ",#{c.ele}"
         end
         tsj += ']'
+
       end
-      j+=tsj
-      j+=']'
+
+      json_string+=tsj
+      json_string+=']'
+
     end
-    j + ']}}'
+
+    json_string + ']}}'
+
   end
 end
 
@@ -80,42 +91,43 @@ class Waypoint
   end
 
   def get_waypoint_json(indent=0)
-    j = '{"type": "Feature",'
+    json_string = '{"type": "Feature",'
     # if name is not nil or type is not nil
-    j += '"geometry": {"type": "Point","coordinates": '
-    j += "[#{@lon},#{@lat}"
+    json_string += '"geometry": {"type": "Point","coordinates": '
+    json_string += "[#{@lon},#{@lat}"
 
     if ele != nil
-      j += ",#{@ele}"
+      json_string += ",#{@ele}"
     end
 
-    j += ']},'
+    json_string += ']},'
 
     if name != nil or type != nil
-      j += '"properties": {'
+      json_string += '"properties": {'
       if name != nil
-        j += '"title": "' + @name + '"'
+        json_string += '"title": "' + @name + '"'
       end
       if type != nil  # if type is not nil
         if name != nil
-          j += ','
+          json_string += ','
         end
-        j += '"icon": "' + @type + '"'  # type is the icon
+        json_string += '"icon": "' + @type + '"'  # type is the icon
       end
-      j += '}'
+      json_string += '}'
     end
 
-    j += "}"
-    return j
+    json_string += "}"
+    return json_string
   end
 
 end
 
 class World
-def initialize(name, things)
-  @name = name
-  @features = things
-end
+  def initialize(name, things)
+    @name = name
+    @features = things
+  end
+
   def add_feature(f)
     @features.append(t)
   end
@@ -127,17 +139,22 @@ end
       if i != 0
         s +=","
       end
-        if f.class == Track
-            s += f.get_track_json
-        elsif f.class == Waypoint
-            s += f.get_waypoint_json
+
+      if f.class == Track
+          s += f.get_track_json
+      elsif f.class == Waypoint
+          s += f.get_waypoint_json
       end
+
     end
+
     s + "]}"
   end
+
 end
 
 def main()
+  #main makes the world state of the coordinates
   w = Waypoint.new(-121.5, 45.5, 30, "home", "flag")
   w2 = Waypoint.new(-121.5, 45.6, nil, "store", "dot")
   ts1 = [
