@@ -4,8 +4,8 @@ class Track
   def initialize(segments, name=nil)
     @name = name
     segment_objects = []
-    segments.each do |s|
-      segment_objects.append(TrackSegment.new(s))
+    segments.each do |coordinates|
+      segment_objects.append(TrackSegment.new(coordinates))
     end
     # set segments to segment_objects
     @segments = segment_objects
@@ -25,7 +25,7 @@ class Track
     json_string += '"type": "MultiLineString",'
     json_string +='"coordinates": ['
     # Loop through all the segment objects
-    @segments.each_with_index do |s, index|
+    @segments.each_with_index do |coordinates, index|
 
       if index > 0
         json_string += ","
@@ -35,7 +35,7 @@ class Track
       # Loop through all the coordinates in the segment
       tsj = ''
 
-      s.coordinates.each do |c|
+      coordinates.coordinates.each do |c|
 
         if tsj != ''
           tsj += ','
