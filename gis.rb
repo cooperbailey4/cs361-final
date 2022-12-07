@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-#j = json_string
 class Track
   def initialize(segments, name=nil)
     @name = name
@@ -11,7 +10,11 @@ class Track
     @segments = segment_objects
   end
 
-  def get_track_json()
+=begin
+get_track_json() creates the json string for the track
+=end
+
+  def get_json()
     json_string = '{'
     json_string += '"type": "Feature", '
 
@@ -49,6 +52,10 @@ class Track
     json_string + ']}}'
 
   end
+
+=begin
+get_coordinate_json(...) creates the json string for the coordinates to be sent to the track
+=end
 
   def get_coordinate_json(track_segment_string, coordinate)
 
@@ -96,7 +103,7 @@ class Waypoint
     @type = type
   end
 
-  def get_waypoint_json(indent=0)
+  def get_json(indent=0)
     json_string = '{"type": "Feature",'
     # if name is not nil or type is not nil
     json_string += '"geometry": {"type": "Point","coordinates": '
@@ -147,11 +154,12 @@ class World
         geo_json_string +=","
       end
 
-      if waypoint_or_track.class == Track
-          geo_json_string += waypoint_or_track.get_track_json
-      elsif waypoint_or_track.class == Waypoint
-          geo_json_string += waypoint_or_track.get_waypoint_json
-      end
+      # if waypoint_or_track.class == Track
+      #     geo_json_string += waypoint_or_track.get_track_json
+      # elsif waypoint_or_track.class == Waypoint
+      #     geo_json_string += waypoint_or_track.get_waypoint_json
+      # end
+      geo_json_string += waypoint_or_track.get_json
 
     end
 
