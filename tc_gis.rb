@@ -2,6 +2,7 @@ require_relative 'gis.rb'
 require 'json'
 require 'test/unit'
 
+#are the tests not testing one part?
 class TestGis < Test::Unit::TestCase
 
   def test_waypoints
