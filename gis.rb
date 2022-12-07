@@ -123,9 +123,9 @@ class Waypoint
 end
 
 class World
-  def initialize(name, things)
+  def initialize(name, waypoints_and_tracks)
     @name = name
-    @features = things
+    @features = waypoints_and_tracks
   end
 
   #is this necessary?
