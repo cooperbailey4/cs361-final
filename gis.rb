@@ -2,10 +2,6 @@
 class Track
   def initialize(*args, name:nil)
     @name = name
-    # segment_objects = []
-    # segments.each do |coordinates|
-    #   segment_objects.append(coordinates)
-    # end
     @segments = args
   end
 
@@ -36,10 +32,14 @@ get_json() creates the json string for the track class
 
       track_segment_string = ''
       #whose responsibility is it to get the json of the coordinate
-      # p(@segments.class)
-      # pp(track_segment.class)
+      #pp(track_segment)
       track_segment.coordinates.each do |coordinate|
-        track_segment_string = get_coordinate_json(track_segment_string, coordinate)
+        if track_segment_string != ''
+          track_segment_string += ','
+        end
+        #track_segment_string += '['
+
+        track_segment_string = coordinate.get_coordinate_json(track_segment_string)
       end
 
       json_string+=track_segment_string
@@ -51,26 +51,6 @@ get_json() creates the json string for the track class
 
   end
 
-=begin
-get_coordinate_json(...) creates the json string for the coordinates to be sent to the track
-Adds the coordinate parts (longitude, latitude, and elevation) to the json string
-=end
-
-  def get_coordinate_json(track_segment_string, coordinate)
-
-    if track_segment_string != ''
-      track_segment_string += ','
-    end
-    track_segment_string += '['
-
-    # this could probably be turned into a function within the point class
-    track_segment_string += "#{coordinate.lon},#{coordinate.lat}"
-    if coordinate.ele != nil
-      track_segment_string += ",#{coordinate.ele}"
-    end
-
-    track_segment_string += ']'
-  end
 
 end
 
@@ -88,6 +68,23 @@ class Point
     @lat = lat
     @ele = ele
   end
+
+=begin
+get_coordinate_json(...) creates the json string for the coordinates to be sent to the track
+Adds the coordinate parts (longitude, latitude, and elevation) to the json string
+=end
+
+  def get_coordinate_json(string)
+
+    # this could probably be turned into a function within the point class
+    string += "[#{@lon},#{@lat}"
+    if @ele != nil
+      string += ",#{@ele}"
+    end
+
+    string += ']'
+  end
+
 end
 
 #this could probably be subclass of point
@@ -102,18 +99,22 @@ class Waypoint < Point
   end
 
   #get_json() creates the json string for the waypoint class
+  def get_coordinate_json(string)
+    super string
+  end
 
   def get_json(indent=0)
     json_string = '{"type": "Feature",'
     json_string += '"geometry": {"type": "Point","coordinates": '
 
-    # this could probably be turned into a function within the point class
-    json_string += "[#{@lon},#{@lat}"
-    if ele != nil
-      json_string += ",#{@ele}"
-    end
+    #this could probably be turned into a function within the point class
+    # json_string += "[#{@lon},#{@lat}"
+    # if ele != nil
+    #   json_string += ",#{@ele}"
+    # end
+    json_string = get_coordinate_json(json_string)
 
-    json_string += ']},'
+    json_string += '},'
 
     if name != nil or type != nil
       json_string += '"properties": {'
