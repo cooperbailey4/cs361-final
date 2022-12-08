@@ -33,7 +33,8 @@ get_json() creates the json string for the track class
 
       track_segment_string = ''
       #whose responsibility is it to get the json of the coordinate
-
+      #lets have coordinates be acted upon directly
+      #@coordinates.each do |coordinate|
       track_segment.coordinates.each do |coordinate|
         if track_segment_string != ''
           track_segment_string += ','
