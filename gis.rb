@@ -1,4 +1,7 @@
 #!/usr/bin/env ruby
+=begin
+Track is a collection of TrackSegments making up a Track
+=end
 class Track
   def initialize(*args, name:nil)
     @name = name
@@ -32,9 +35,7 @@ get_json() creates the json string for the track class
       json_string += '['
 
       track_segment_string = ''
-      #whose responsibility is it to get the json of the coordinate
-      #lets have coordinates be acted upon directly
-      #@coordinates.each do |coordinate|
+      #can be futher done to take coordinates directly instead of the tracksegment
       track_segment.coordinates.each do |coordinate|
         if track_segment_string != ''
           track_segment_string += ','
@@ -54,6 +55,10 @@ get_json() creates the json string for the track class
 
 end
 
+
+=begin
+TrackSegment is a collection of points that make up a segment of a larger Track
+=end
 class TrackSegment
   attr_reader :coordinates
   def initialize(coordinates)
@@ -61,6 +66,9 @@ class TrackSegment
   end
 end
 
+=begin
+Point is a collection of coordinates (longitude, latitude and elevation) that can be used to make up Tracks and Track segments
+=end
 class Point
   attr_reader :lat, :lon, :ele
   def initialize(lon, lat, ele=nil)
@@ -86,7 +94,9 @@ Adds the coordinate parts (longitude, latitude, and elevation, if it has one) to
 
 end
 
-#this could probably be subclass of point
+=begin
+Waypoint is a subclass of point, it has the same methods as the superclass aswell as the same root attributes lon = longitude, lat = latitude, and ele = elevation, but it has two more as well, a name and type,
+=end
 class Waypoint < Point
 
   attr_reader :lat, :lon, :ele, :name, :type
@@ -126,6 +136,9 @@ class Waypoint < Point
 
 end
 
+=begin
+World creates the world state geojson containing all points, Tracksegments and Tracks that make up the broader context of the code
+=end
 class World
   def initialize(name, waypoints_and_tracks)
     @name = name
@@ -154,7 +167,7 @@ end
 
 
 def main()
-  #main makes the world state of the coordinates
+  #main makes the initial world state of the coordinates
   w = Waypoint.new(-121.5, 45.5, 30, "home", "flag")
   w2 = Waypoint.new(-121.5, 45.6, nil, "store", "dot")
   ts1 = [
