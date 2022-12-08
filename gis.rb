@@ -1,12 +1,12 @@
 #!/usr/bin/env ruby
 class Track
-  def initialize(segments, name=nil)
+  def initialize(*args, name:nil)
     @name = name
-    segment_objects = []
-    segments.each do |coordinates|
-      segment_objects.append(TrackSegment.new(coordinates))
-    end
-    @segments = segment_objects
+    # segment_objects = []
+    # segments.each do |coordinates|
+    #   segment_objects.append(coordinates)
+    # end
+    @segments = args
   end
 
 =begin
@@ -26,7 +26,7 @@ get_json() creates the json string for the track class
     json_string += '"geometry": {'
     json_string += '"type": "MultiLineString",'
     json_string +='"coordinates": ['
-    @segments.each_with_index do |coordinates, index|
+    @segments.each_with_index do |track_segment, index|
 
       if index > 0
         json_string += ","
@@ -35,7 +35,10 @@ get_json() creates the json string for the track class
       json_string += '['
 
       track_segment_string = ''
-      coordinates.coordinates.each do |coordinate|
+      #whose responsibility is it to get the json of the coordinate
+      # p(@segments.class)
+      # pp(track_segment.class)
+      track_segment.coordinates.each do |coordinate|
         track_segment_string = get_coordinate_json(track_segment_string, coordinate)
       end
 
@@ -79,9 +82,7 @@ class TrackSegment
 end
 
 class Point
-
   attr_reader :lat, :lon, :ele
-
   def initialize(lon, lat, ele=nil)
     @lon = lon
     @lat = lat
@@ -160,6 +161,7 @@ class World
 
 end
 
+
 def main()
   #main makes the world state of the coordinates
   w = Waypoint.new(-121.5, 45.5, 30, "home", "flag")
@@ -177,8 +179,8 @@ def main()
     Point.new(-122, 45.5),
   ]
 
-  t = Track.new([ts1, ts2], "track 1")
-  t2 = Track.new([ts3], "track 2")
+  t = Track.new(TrackSegment.new(ts1), TrackSegment.new(ts2), name:"track 1")
+  t2 = Track.new(TrackSegment.new(ts3), "track 2")
 
   #world takes a name and list of waypoints, or tracks, or waypoints and tracks
   world = World.new("My Data", [w, w2, t, t2])
