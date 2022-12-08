@@ -3,6 +3,7 @@ class Track
   def initialize(*args, name:nil)
     @name = name
     @segments = args
+    #@coordinates = coordinates
   end
 
 =begin
@@ -68,13 +69,12 @@ class Point
   end
 
 =begin
-get_coordinate_json(...) creates the json string for the coordinates to be sent to the track
-Adds the coordinate parts (longitude, latitude, and elevation) to the json string
+get_coordinate_json(...) creates the json string for the coordinates to be sent to the track and waypoint
+Adds the coordinate parts (longitude, latitude, and elevation, if it has one) to the json string
 =end
 
   def get_coordinate_json(string)
 
-    # this could probably be turned into a function within the point class
     string += "[#{@lon},#{@lat}"
     if @ele != nil
       string += ",#{@ele}"
@@ -95,12 +95,6 @@ class Waypoint < Point
     @name = name
     @type = type
   end
-
-
-  # this should be how super works, however the code passes with or without this method, so I will leave it out after a commit
-  # def get_coordinate_json(string)
-  #   super string
-  # end
 
   #get_json() creates the json string for the waypoint class
   def get_json(indent=0)
@@ -176,7 +170,7 @@ def main()
   ]
 
   t = Track.new(TrackSegment.new(ts1), TrackSegment.new(ts2), name:"track 1")
-  t2 = Track.new(TrackSegment.new(ts3), "track 2")
+  t2 = Track.new(TrackSegment.new(ts3), name:"track 2")
 
   #world takes a name and list of waypoints, or tracks, or waypoints and tracks
   world = World.new("My Data", [w, w2, t, t2])
