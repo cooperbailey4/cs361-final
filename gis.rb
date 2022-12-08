@@ -32,13 +32,11 @@ get_json() creates the json string for the track class
 
       track_segment_string = ''
       #whose responsibility is it to get the json of the coordinate
-      #pp(track_segment)
+
       track_segment.coordinates.each do |coordinate|
         if track_segment_string != ''
           track_segment_string += ','
         end
-        #track_segment_string += '['
-
         track_segment_string = coordinate.get_coordinate_json(track_segment_string)
       end
 
@@ -98,20 +96,17 @@ class Waypoint < Point
     @type = type
   end
 
-  #get_json() creates the json string for the waypoint class
-  def get_coordinate_json(string)
-    super string
-  end
 
+  # this should be how super works, however the code passes with or without this method, so I will leave it out after a commit
+  # def get_coordinate_json(string)
+  #   super string
+  # end
+
+  #get_json() creates the json string for the waypoint class
   def get_json(indent=0)
     json_string = '{"type": "Feature",'
     json_string += '"geometry": {"type": "Point","coordinates": '
 
-    #this could probably be turned into a function within the point class
-    # json_string += "[#{@lon},#{@lat}"
-    # if ele != nil
-    #   json_string += ",#{@ele}"
-    # end
     json_string = get_coordinate_json(json_string)
 
     json_string += '},'
